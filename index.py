@@ -13,7 +13,7 @@ def main():
         button1 = types.KeyboardButton("Сделать Заказ")
         button2 = types.KeyboardButton("Предыдущий заказ")
         markup.add(button1, button2)
-        bot.send_message(message.chat.id, "Здравствуйте, Спасибо что пользуетесь хуйботом. Вы желаете сделать заказ, или просмотреть предыдущий заказ?", reply_markup=markup)
+        bot.send_message(message.chat.id, "Здравствуйте, вы желаете сделать заказ, или просмотреть предыдущий заказ?", reply_markup=markup)
 
     @bot.message_handler(func=lambda message: message.text is not None and '/' not in message.text)
     def reply(message):
