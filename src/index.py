@@ -2,6 +2,8 @@ import os
 import telebot
 from telebot import types
 from dotenv import load_dotenv
+from DataAccessFunctions import getCategories, getDishes
+from order import order
 
 from registration import registration
 
@@ -12,6 +14,10 @@ def main():
     @bot.message_handler(commands=['reg', 'registration'])
     def r(message):
         registration(bot, message)
+
+    @bot.message_handler(commands=['o'])
+    def o(message):
+        order(bot, message)
 
     @bot.message_handler(commands=['start'])
     def start(message):

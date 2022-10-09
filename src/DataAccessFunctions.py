@@ -26,3 +26,37 @@ def saveUser(name, surname, bat, office, telegramChatId):
 
 def getOffices():
     return ['Авиамоторная', 'Октябрьское Поле']
+
+def getRestaurants():
+    file = open('./src/data/menu.json', encoding='utf8')
+    restaurants = json.load(file)
+    elements = []
+    for r in restaurants:
+        elements.append(r['name'])
+    return elements
+
+def getCategories(restaurant):
+    file = open('./src/data/menu.json', encoding='utf8')
+    restaurants = json.load(file)
+    for r in restaurants:
+        if r['name'] == restaurant:
+            elements = []
+            for c in r['categories']:
+                elements.append(c['name'])
+            return elements
+    return None
+
+def getDishes(restaurant, category):
+    file = open('./src/data/menu.json', encoding='utf8')
+    restaurants = json.load(file)
+    for r in restaurants:
+        if r['name'] == restaurant:
+            elements = []
+            for c in r['categories']:
+                if c['name'] == category:
+                    elements = []
+                    for d in c['dishes']:
+                        elements.append(d['name'] + ".........." + str(d['price']))
+                    return elements
+        return None
+    return None

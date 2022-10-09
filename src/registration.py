@@ -1,7 +1,6 @@
 from telebot import types
 
-from DataAccessFunctions import getUserByTelegramChatId, saveUser
-from DataAccessFunctions import getOffices
+from DataAccessFunctions import getUserByTelegramChatId, saveUser, getOffices
 
 def registration(b, m):
     global bot
