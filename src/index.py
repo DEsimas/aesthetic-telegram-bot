@@ -3,9 +3,15 @@ import telebot
 from telebot import types
 from dotenv import load_dotenv
 
+from registration import registration
+
 def main():
     load_dotenv()
     bot = telebot.TeleBot(os.environ.get('API_KEY'))
+
+    @bot.message_handler(commands=['reg', 'registration'])
+    def r(message):
+        registration(bot, message)
 
     @bot.message_handler(commands=['start'])
     def start(message):
