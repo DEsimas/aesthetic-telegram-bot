@@ -6,12 +6,13 @@ def order(b, m):
     global orderArr
     orderArr = []
     global commands
-    commands = ['Завершить заказ', 'Назад', 'Отменить заказ']
+    commands = {
+        'finish': 'Завершить заказ',
+        'back': 'Назад',
+        'discard': 'Отменить заказ'
+    }  
     global bot
     bot = b
-    if getUserByTelegramChatId(m.chat.id) == None:
-        bot.send_message(m.chat.id, 'Вы не зарегистрированы! Используйте /reg')
-        return
     get_restaurant(m)
 
 def getKeyboard(data):
@@ -19,26 +20,22 @@ def getKeyboard(data):
     for line in data:
         item = types.InlineKeyboardButton(line)
         keyboard.add(item)
-    item = types.InlineKeyboardButton(commands[0])
+    item = types.InlineKeyboardButton(commands['finish'])
     keyboard.add(item)
-    item = types.InlineKeyboardButton(commands[1])
+    item = types.InlineKeyboardButton(commands['back'])
     keyboard.add(item)
-    item = types.InlineKeyboardButton(commands[2])
+    item = types.InlineKeyboardButton(commands['discard'])
     keyboard.add(item)
     return keyboard
 
 def handleCommands(message, next):
-    try:
-        commands.index(message.text)
-    except:
-        next(message)
-    else:
-        if (message.text == commands[0]):
-            cmd_finish(message)
-        if (message.text == commands[1]):
-            cmd_back(message)
-        if message.text == commands[2]:
-            cmd_discard(message)
+    if (message.text == commands['finish']):
+        return cmd_finish(message)
+    if (message.text == commands['back']):
+        return cmd_back(message)
+    if message.text == commands['discard']:
+        return cmd_discard(message)
+    next(message)
 
 def cmd_finish(message):
     if len(orderArr) == 0:
@@ -55,9 +52,9 @@ def cmd_discard(message):
 
 def get_restaurant(message):
     bot.send_message(message.chat.id, 'Выберите ресторан:', reply_markup=getKeyboard(getRestaurants()))
-    bot.register_next_step_handler(message, handleCommands, get_category)
+    bot.register_next_step_handler(message, handleCommands, save_restaurant)
 
-def get_category(message):
+def save_restaurant(message):
     try:
         getRestaurants().index(message.text)
     except:
@@ -66,10 +63,13 @@ def get_category(message):
     else:
         global restaurant
         restaurant = message.text
-        bot.send_message(message.chat.id, 'Выберите категорию:', reply_markup=getKeyboard(getCategories(restaurant)))
-        bot.register_next_step_handler(message, handleCommands, get_dish)
+        get_category(message)
 
-def get_dish(message):
+def get_category(message):
+    bot.send_message(message.chat.id, 'Выберите категорию:', reply_markup=getKeyboard(getCategories(restaurant)))
+    bot.register_next_step_handler(message, handleCommands, save_category)
+
+def save_category(message):
     try:
         getCategories(restaurant).index(message.text)
     except:
@@ -78,10 +78,13 @@ def get_dish(message):
     else:
         global category
         category = message.text
-        bot.send_message(message.chat.id, 'Выберите блюдо:', reply_markup=getKeyboard(getDishes(restaurant, category)))
-        bot.register_next_step_handler(message, handleCommands, save)
+        get_dish(message)
 
-def save(message):
+def get_dish(message):
+    bot.send_message(message.chat.id, 'Выберите блюдо:', reply_markup=getKeyboard(getDishes(restaurant, category)))
+    bot.register_next_step_handler(message, handleCommands, save_dish)
+
+def save_dish(message):
     try:
         getDishes(restaurant, category).index(message.text)
     except:
@@ -90,9 +93,13 @@ def save(message):
     else:
         global dish
         dish = message.text.split('..........')[0]
-        orderArr.append({
-            'restaurant': restaurant,
-            'category': category,
-            'dish': dish
-        })
-        get_category(message)
+        save(message)
+
+def save(message):
+    orderArr.append({
+        'restaurant': restaurant,
+        'category': category,
+        'dish': dish
+    })
+    bot.send_message(message.chat.id, 'Блюдо добавлено')
+    get_category(message)
