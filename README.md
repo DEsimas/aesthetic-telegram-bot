@@ -19,3 +19,8 @@
         </tr>
    </tbody>
 </table>
+
+## Data
+menu.json - array
+
+users.json - array
