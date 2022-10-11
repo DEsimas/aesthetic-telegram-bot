@@ -1,6 +1,7 @@
 from telebot import types
 
 from DataAccessFunctions import getUserByTelegramChatId, saveUser, getOffices
+from start import start
 
 class User:
     def __init__(self) -> None:
@@ -55,6 +56,7 @@ def registration(bot, m):
         if message.text == 'Да, все верно':
             saveUser(user.name, user.surname, user.bat, user.office, message.chat.id)
             bot.send_message(message.chat.id, 'Регистрация завершена')
+            start(bot, message)
         else:
             get_surname(message)
     

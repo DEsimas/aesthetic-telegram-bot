@@ -1,8 +1,7 @@
 import os
+from validate import validate
 import telebot
 from dotenv import load_dotenv
-from DataAccessFunctions import getCategories, getDishes
-from notification import notification
 
 from registration import registration
 from start import start
@@ -19,7 +18,10 @@ def main():
     def s(message):
         start(bot, message)
     
-    notification(bot, 'Октябрьское Поле', 1)
+    @bot.message_handler(commands=['test'])
+    def t(message):
+        validate(bot, message)
+
     bot.infinity_polling()
 
 if __name__ == '__main__':

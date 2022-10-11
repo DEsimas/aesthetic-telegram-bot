@@ -1,6 +1,6 @@
 from telebot import types
 
-from DataAccessFunctions import getCategories, getDishes, getPaymentByOrderId, getRestaurants, getUserByTelegramChatId
+from DataAccessFunctions import getCategories, getDishes, getPaymentByOffice, getRestaurants, getUserByTelegramChatId
 
 class Order:
     def __init__(self) -> None:
@@ -9,7 +9,7 @@ class Order:
         self.name = ''
         self.price = -1
 
-def order(bot, m, orderId):
+def order(bot, m):
     def getKeyboard(data):
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         for line in data:
@@ -42,7 +42,7 @@ def order(bot, m, orderId):
         if len(orderArr) == 0:
             cmd_discard(message)
         else:
-            bot.send_message(message.chat.id, 'Вам нужно перевести ' + str(get_price()) + ' рублей. ' + getPaymentByOrderId(orderId))
+            bot.send_message(message.chat.id, 'Вам нужно перевести ' + str(get_price()) + ' рублей. ' + getPaymentByOffice(getUserByTelegramChatId(message.chat.id)['office']))
             print(orderArr)
 
     def cmd_back(message):

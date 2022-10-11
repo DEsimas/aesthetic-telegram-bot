@@ -17,7 +17,8 @@ def saveUser(name, surname, bat, office, telegramChatId):
     user = {
         'name': surname + ' ' + name + ' ' + bat,
         'office': office,
-        'telegramChatId': telegramChatId
+        'telegramChatId': telegramChatId,
+        'role': 'user'
     }
     users = getUsers()
     users.append(user)
@@ -71,5 +72,13 @@ def getUsersByOffice(office):
             elements.append(u)
     return elements
 
-def getPaymentByOrderId(orderId):
-    return 'переведите по СБП на +79116447382'
+def getCourierByOffice(office):
+    file = open('./src/data/users.json', encoding='utf8')
+    users = json.load(file)
+    for user in users:
+        if user['role'] == 'courier' and user['office'] == office:
+            return user
+    return None
+
+def getPaymentByOffice(office):
+    return getCourierByOffice(office)['payment']

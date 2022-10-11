@@ -3,10 +3,10 @@ from DataAccessFunctions import getUsersByOffice
 from order import order
 
 
-def notification(bot, office, orderId):
+def notification(bot, office):
     @bot.callback_query_handler(func=lambda m: True)
     def join(call):
-        order(bot, call.message, orderId)
+        order(bot, call.message)
 
     users = getUsersByOffice(office)
     for u in users:
