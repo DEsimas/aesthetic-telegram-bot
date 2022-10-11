@@ -23,6 +23,6 @@ def validate_user(message):
 def start_func(message):
     markup = types.ReplyKeyboardMarkup(row_width=2)
     button1 = types.KeyboardButton("Сделать Заказ")
-    button2 = types.KeyboardButton("Предыдущий заказ")
+    button2 = types.KeyboardButton("Текущий заказ")
     markup.add(button1, button2)
     bot.send_message(message.chat.id, "Здравствуйте, вы желаете сделать заказ, или просмотреть предыдущий заказ?", reply_markup=markup)

@@ -13,6 +13,7 @@ def getUsers():
     return json.load(file)
 
 def saveUser(name, surname, bat, office, telegramChatId):
+    print(name, surname, bat, office, telegramChatId)
     user = {
         'name': surname + ' ' + name + ' ' + bat,
         'office': office,
@@ -61,8 +62,8 @@ def getDishes(restaurant, category):
         return None
     return None
 
-def getUsersWithOffice(office):
-    file = open('./src/data/uesrs.json', encoding='utf8')
+def getUsersByOffice(office):
+    file = open('./src/data/users.json', encoding='utf8')
     users = json.load(file)
     elements = []
     for u in users:
