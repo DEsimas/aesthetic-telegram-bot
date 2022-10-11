@@ -83,6 +83,50 @@ def getCourierByOffice(office):
 def getPaymentByOffice(office):
     return getCourierByOffice(office)['payment']
 
-def startInOffice(office):
-    file = open('./src/data/offices.json', encoding='utf8')
+def addOrder(office, chatId, order):
+    file = open('./src/data/orders.json', encoding='utf8')
     offices = json.load(file)
+    users = offices[office]
+    users[chatId] = {
+        "validated": False,
+        "order": order
+    }
+    officesJSON = json.dumps(offices, indent = 4, ensure_ascii=False)
+    file = open('./src/data/orders.json', 'w', encoding='utf8')
+    file.write(officesJSON)
+
+def validateOrder(office, chatId):
+    file = open('./src/data/orders.json', encoding='utf8')
+    offices = json.load(file)
+    users = offices[office]
+    users[chatId] = {
+        "validated": True,
+        "order": users[str(chatId)]['order']
+    }
+    officesJSON = json.dumps(offices, indent = 4, ensure_ascii=False)
+    file = open('./src/data/orders.json', 'w', encoding='utf8')
+    file.write(officesJSON)
+
+def getOrders(office):
+    file = open('./src/data/orders.json', encoding='utf8')
+    offices = json.load(file)
+    orders = offices[office]
+    msg = ''
+    for id in orders:
+        order = orders[id]
+        if order['validated']:
+            msg += (getUserByTelegramChatId(int(id))['name'] + ':\n')
+            for o in order['order']:
+                msg += ('   ' + o['restaurant'] + ' --> ' + o['category'] + ' --> ' + o['dish'] + '\n')
+            msg += '\n'
+    if len(msg) == 0:
+        return 'Заказов нет'
+    return msg
+
+def clearOrders(office):
+    file = open('./src/data/orders.json', encoding='utf8')
+    offices = json.load(file)
+    offices[office] = {}
+    officesJSON = json.dumps(offices, indent = 4, ensure_ascii=False)
+    file = open('./src/data/orders.json', 'w', encoding='utf8')
+    file.write(officesJSON)

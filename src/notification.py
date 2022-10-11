@@ -1,5 +1,5 @@
 from telebot import types
-from DataAccessFunctions import getUsersByOffice
+from DataAccessFunctions import getUsersByOffice, validateOrder
 from order import order
 from validate import validate
 
@@ -12,6 +12,7 @@ def notification(bot, office, time):
             order(bot, call.message)
         if call.data.split(' ')[0] == 'yes':
             bot.send_message(int(call.data.split(' ')[1]), 'Заказ начали собирать')
+            validateOrder(office, call.data.split(' ')[1])
         if call.data.split(' ')[0] == 'no':
             item1 = types.InlineKeyboardButton(text='Отправить фото еще раз', callback_data='remove ' + call.data.split(' ')[2])
             keyboard = types.InlineKeyboardMarkup(row_width=1)

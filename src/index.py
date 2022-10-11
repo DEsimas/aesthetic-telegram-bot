@@ -1,4 +1,5 @@
 import os
+from DataAccessFunctions import addOrder, getOrders, validateOrder
 from validate import validate
 import telebot
 from telebot import types
@@ -20,8 +21,8 @@ def main():
     def s(message):
         start(bot, message)
     
-    @bot.message_handler(commands=['test'])
-    def t(message):
+    @bot.message_handler(commands=['init'])
+    def i(message):
         startDelivery(bot, message)
 
     bot.infinity_polling()
