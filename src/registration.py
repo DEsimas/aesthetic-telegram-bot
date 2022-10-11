@@ -55,7 +55,7 @@ def registration(bot, m):
     def save(message):
         if message.text == 'Да, все верно':
             saveUser(user.name, user.surname, user.bat, user.office, message.chat.id)
-            bot.send_message(message.chat.id, 'Регистрация завершена')
+            bot.send_message(message.chat.id, 'Регистрация завершена, ждите уведомление о сборе заказов')
             start(bot, message)
         else:
             get_surname(message)
