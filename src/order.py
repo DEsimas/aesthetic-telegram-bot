@@ -43,6 +43,10 @@ def order(bot, m):
         if len(orderArr) == 0:
             cmd_discard(message)
         else:
+            msg = ''
+            for el in orderArr:
+                msg += el['restaurant'] + ' - ' + el['category'] + ' - ' + el['dish'] + '\n'
+            bot.send_message(message.chat.id, 'Заказ:\n' + msg)
             bot.send_message(message.chat.id, 'Вам нужно перевести ' + str(get_price()) + ' рублей. ' + getPaymentByOffice(getUserByTelegramChatId(message.chat.id)['office']))
             addOrder(getUserByTelegramChatId(message.chat.id)['office'], message.chat.id, orderArr)
             validate(bot, message, get_price())

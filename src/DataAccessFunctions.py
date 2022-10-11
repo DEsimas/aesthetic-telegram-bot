@@ -117,11 +117,17 @@ def getOrders(office):
         if order['validated']:
             msg += (getUserByTelegramChatId(int(id))['name'] + ':\n')
             for o in order['order']:
-                msg += ('   ' + o['restaurant'] + ' --> ' + o['category'] + ' --> ' + o['dish'] + '\n')
+                msg += ('   ' + o['restaurant'] + ' - ' + o['category'] + ' - ' + o['dish'] + '\n')
             msg += '\n'
     if len(msg) == 0:
         return 'Заказов нет'
     return msg
+
+def getOrder(office, chatId):
+    file = open('./src/data/orders.json', encoding='utf8')
+    offices = json.load(file)
+    office = offices[office]
+    return office[str(chatId)]
 
 def clearOrders(office):
     file = open('./src/data/orders.json', encoding='utf8')
