@@ -136,3 +136,12 @@ def clearOrders(office):
     officesJSON = json.dumps(offices, indent = 4, ensure_ascii=False)
     file = open('./src/data/orders.json', 'w', encoding='utf8')
     file.write(officesJSON)
+
+def getCouriersIds():
+    file = open('./src/data/users.json', encoding='utf8')
+    users = json.load(file)
+    elements = []
+    for u in users:
+        if u['role'] == 'courier':
+            elements.append(u['telegramChatId'])
+    return elements
