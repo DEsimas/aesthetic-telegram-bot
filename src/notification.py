@@ -3,14 +3,14 @@ from DataAccessFunctions import getUsersByOffice
 from order import order
 
 
-def notification(bot, office, restaurant, orderId):
+def notification(bot, office, orderId):
     @bot.callback_query_handler(func=lambda m: True)
     def join(call):
-        order(bot, call.message, restaurant, orderId)
+        order(bot, call.message, orderId)
 
     users = getUsersByOffice(office)
     for u in users:
         markup = types.InlineKeyboardMarkup()
         button= types.InlineKeyboardButton(text='Присоединиться', callback_data='Join')
         markup.add(button)
-        bot.send_message(u['telegramChatId'], 'Ребята из ' + office + ' заказывают еду из ресторана ' + restaurant, reply_markup=markup)
+        bot.send_message(u['telegramChatId'], 'Начат сбор заказов в офисе: ' + office, reply_markup=markup)

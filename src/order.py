@@ -4,11 +4,12 @@ from DataAccessFunctions import getCategories, getDishes, getPaymentByOrderId, g
 
 class Order:
     def __init__(self) -> None:
+        self.restaurant = ''
         self.category = ''
         self.name = ''
         self.price = -1
 
-def order(bot, m, restaurant, orderId):
+def order(bot, m, orderId):
     def getKeyboard(data):
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         for line in data:
@@ -45,19 +46,39 @@ def order(bot, m, restaurant, orderId):
             print(orderArr)
 
     def cmd_back(message):
+        if current.restaurant == '':
+            cmd_discard()
         get_category(message)
 
     def cmd_discard(message):
         bot.send_message(message.chat.id, 'Заказ отменён')
         return
 
+    def get_restaurant(message):
+        keyboard = types.ReplyKeyboardMarkup(row_width = 3)
+        for i in getRestaurants():
+            key = types.InlineKeyboardButton(i)
+            keyboard.add(key)
+        bot.send_message(message.chat.id, "Из какого Ресторана вы хотите сделать заказ?", reply_markup=keyboard)
+        bot.register_next_step_handler(message, handleCommands, save_restaurant)
+
+    def save_restaurant(message):
+        try:
+            getRestaurants().index(message.text)
+        except:
+            bot.send_message(message.chat.id, 'Ресторан введён неверно')
+            get_restaurant(message)
+        else:
+            current.restaurant = message.text
+            get_category(message)
+
     def get_category(message):
-        bot.send_message(message.chat.id, 'Выберите категорию:', reply_markup=getKeyboard(getCategories(restaurant)))
+        bot.send_message(message.chat.id, 'Выберите категорию:', reply_markup=getKeyboard(getCategories(current.restaurant)))
         bot.register_next_step_handler(message, handleCommands, save_category)
 
     def save_category(message):
         try:
-            getCategories(restaurant).index(message.text)
+            getCategories(current.restaurant).index(message.text)
         except:
             bot.send_message(message.chat.id, 'Категория введёна неверно')
             get_category(message)
@@ -66,12 +87,12 @@ def order(bot, m, restaurant, orderId):
             get_dish(message)
 
     def get_dish(message):
-        bot.send_message(message.chat.id, 'Выберите блюдо:', reply_markup=getKeyboard(getDishes(restaurant, current.category)))
+        bot.send_message(message.chat.id, 'Выберите блюдо:', reply_markup=getKeyboard(getDishes(current.restaurant, current.category)))
         bot.register_next_step_handler(message, handleCommands, save_dish)
 
     def save_dish(message):
         try:
-            getDishes(restaurant, current.category).index(message.text)
+            getDishes(current.restaurant, current.category).index(message.text)
         except:
             bot.send_message(message.chat.id, 'Блюдо введёно неверно')
             get_dish(message)
@@ -96,4 +117,4 @@ def order(bot, m, restaurant, orderId):
         'discard': 'Отменить заказ'
     }
     current = Order()
-    get_category(m)
+    get_restaurant(m)

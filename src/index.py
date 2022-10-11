@@ -19,7 +19,7 @@ def main():
     def s(message):
         start(bot, message)
     
-    notification(bot, 'Октябрьское Поле', 'Тестовый ресторан', 1)
+    notification(bot, 'Октябрьское Поле', 1)
     bot.infinity_polling()
 
 if __name__ == '__main__':
