@@ -82,3 +82,7 @@ def getCourierByOffice(office):
 
 def getPaymentByOffice(office):
     return getCourierByOffice(office)['payment']
+
+def startInOffice(office):
+    file = open('./src/data/offices.json', encoding='utf8')
+    offices = json.load(file)

@@ -2,6 +2,7 @@ from telebot import types
 import time
 from notification import notification
 from DataAccessFunctions import getUserByTelegramChatId, getUsers
+from notificationEnd import notificationEnd
 
 def startDelivery(bot, message):
     def Inittime(message):
@@ -19,8 +20,9 @@ def startDelivery(bot, message):
             Inittime(message)
         else:
             bot.send_message(message.chat.id, "Через " + str(ti) + " минут вы можете начать собирать заказы")
-            notification(bot, getUserByTelegramChatId(message.chat.id)['office'])
-            time.sleep(ti) # To add *60
+            notification(bot, getUserByTelegramChatId(message.chat.id)['office'], ti)
+            time.sleep(ti)
+            notificationEnd(bot, getUserByTelegramChatId(message.chat.id)['office'])
     
     type = types.ReplyKeyboardMarkup(row_width = 2, one_time_keyboard=True)
     a = types.KeyboardButton("Да, начать")

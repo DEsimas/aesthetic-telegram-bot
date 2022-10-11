@@ -1,6 +1,7 @@
 from telebot import types
 
 from DataAccessFunctions import getCategories, getDishes, getPaymentByOffice, getRestaurants, getUserByTelegramChatId
+from validate import validate
 
 class Order:
     def __init__(self) -> None:
@@ -43,6 +44,7 @@ def order(bot, m):
             cmd_discard(message)
         else:
             bot.send_message(message.chat.id, 'Вам нужно перевести ' + str(get_price()) + ' рублей. ' + getPaymentByOffice(getUserByTelegramChatId(message.chat.id)['office']))
+            validate(bot, message, get_price())
             print(orderArr)
 
     def cmd_back(message):
