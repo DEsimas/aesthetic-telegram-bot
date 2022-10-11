@@ -27,7 +27,13 @@ def saveUser(name, surname, bat, office, telegramChatId):
     file.write(usersJSON)
 
 def getOffices():
-    return ['Авиамоторная', 'Октябрьское Поле']
+    file = open('./src/data/orders.json', encoding='utf8')
+    offices = json.load(file)
+    elements = []
+    for key in offices:
+        elements.append(key)
+    return elements
+
 
 def getRestaurants():
     file = open('./src/data/menu.json', encoding='utf8')

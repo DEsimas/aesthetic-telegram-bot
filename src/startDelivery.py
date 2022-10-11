@@ -21,7 +21,7 @@ def startDelivery(bot, message):
         else:
             bot.send_message(message.chat.id, "Через " + str(ti) + " минут вы можете начать собирать заказы")
             notification(bot, getUserByTelegramChatId(message.chat.id)['office'], ti)
-            time.sleep(ti)
+            time.sleep(ti*60)
             notificationEnd(bot, getUserByTelegramChatId(message.chat.id)['office'])
 
     try:
