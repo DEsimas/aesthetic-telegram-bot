@@ -57,7 +57,10 @@ def order(bot, m):
         get_category(message)
 
     def cmd_discard(message):
-        bot.send_message(message.chat.id, 'Заказ отменён')
+        markup = types.InlineKeyboardMarkup()
+        button= types.InlineKeyboardButton(text='Присоединиться', callback_data='Join')
+        markup.add(button)
+        bot.send_message(message.chat.id, 'Заказ отменён', reply_markup=markup)
         return
 
     def get_restaurant(message):
