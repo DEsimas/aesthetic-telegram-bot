@@ -151,3 +151,24 @@ def getCouriersIds():
         if u['role'] == 'courier':
             elements.append(u['telegramChatId'])
     return elements
+
+def startOrders(office):
+    file = open('./src/data/offices.json', encoding='utf8')
+    offices = json.load(file)
+    offices[office] = True
+    officesJSON = json.dumps(offices, indent = 4, ensure_ascii=False)
+    file = open('./src/data/offices.json', 'w', encoding='utf8')
+    file.write(officesJSON)
+
+def stopOrders(office):
+    file = open('./src/data/offices.json', encoding='utf8')
+    offices = json.load(file)
+    offices[office] = False
+    officesJSON = json.dumps(offices, indent = 4, ensure_ascii=False)
+    file = open('./src/data/offices.json', 'w', encoding='utf8')
+    file.write(officesJSON)
+
+def getOrdersStatus(office):
+    file = open('./src/data/offices.json', encoding='utf8')
+    offices = json.load(file)
+    return offices[office]

@@ -1,5 +1,5 @@
 from telebot import types
-from DataAccessFunctions import getUsersByOffice, validateOrder
+from DataAccessFunctions import getUsersByOffice, startOrders, validateOrder
 from order import order
 from validate import validate
 
@@ -27,3 +27,5 @@ def notification(bot, office, time):
         button= types.InlineKeyboardButton(text='Присоединиться', callback_data='Join')
         markup.add(button)
         bot.send_message(u['telegramChatId'], 'Начат сбор заказов в офисе: ' + office + '. Сбор закончится через ' + str(time) + ' минут.', reply_markup=markup)
+
+    startOrders(office)
