@@ -9,7 +9,7 @@ def start(b, m):
     @bot.message_handler(func=lambda message: message.text is not None and '/' not in message.text)
     def reply(message):
         if message.text == "Сделать Заказ":
-            order(bot, message)
+            order(bot, message, 'Ресторан 1', 1)
 
     validate_user(m)
 

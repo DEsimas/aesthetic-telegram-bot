@@ -60,3 +60,15 @@ def getDishes(restaurant, category):
                     return elements
         return None
     return None
+
+def getUsersWithOffice(office):
+    file = open('./src/data/uesrs.json', encoding='utf8')
+    users = json.load(file)
+    elements = []
+    for u in users:
+        if u['office'] == office:
+            elements.append(u)
+    return elements
+
+def getPaymentByOrderId(orderId):
+    return 'переведите по СБП на +79116447382'

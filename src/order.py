@@ -1,14 +1,14 @@
 from telebot import types
 
-from DataAccessFunctions import getCategories, getDishes, getRestaurants, getUserByTelegramChatId
+from DataAccessFunctions import getCategories, getDishes, getPaymentByOrderId, getRestaurants, getUserByTelegramChatId
 
 class Order:
     def __init__(self) -> None:
-        self.restaurant = ''
         self.category = ''
         self.name = ''
+        self.price = -1
 
-def order(bot, m):
+def order(bot, m, restaurant, orderId):
     def getKeyboard(data):
         keyboard = types.ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
         for line in data:
@@ -31,69 +31,60 @@ def order(bot, m):
             return cmd_discard(message)
         next(message)
 
+    def get_price():
+        sum = 0
+        for el in orderArr:
+            sum += el['price']
+        return sum
+
     def cmd_finish(message):
         if len(orderArr) == 0:
             cmd_discard(message)
         else:
+            bot.send_message(message.chat.id, 'Вам нужно перевести ' + str(get_price()) + ' рублей. ' + getPaymentByOrderId(orderId))
             print(orderArr)
 
     def cmd_back(message):
-        if current.restaurant != '':
-            get_category(message)
-        else:
-            get_restaurant(message)
+        get_category(message)
 
     def cmd_discard(message):
         bot.send_message(message.chat.id, 'Заказ отменён')
         return
 
-    def get_restaurant(message):
-        bot.send_message(message.chat.id, 'Выберите ресторан:', reply_markup=getKeyboard(getRestaurants()))
-        bot.register_next_step_handler(message, handleCommands, save_restaurant)
-
-    def save_restaurant(message):
-        try:
-            getRestaurants().index(message.text)
-        except:
-            bot.send_message(message.chat.id, 'Ресторан введён неверно')
-            get_restaurant(message)
-        else:
-            current.restaurant = message.text
-            get_category(message)
-
     def get_category(message):
-        bot.send_message(message.chat.id, 'Выберите категорию:', reply_markup=getKeyboard(getCategories(current.restaurant)))
+        bot.send_message(message.chat.id, 'Выберите категорию:', reply_markup=getKeyboard(getCategories(restaurant)))
         bot.register_next_step_handler(message, handleCommands, save_category)
 
     def save_category(message):
         try:
-            getCategories(current.restaurant).index(message.text)
+            getCategories(restaurant).index(message.text)
         except:
             bot.send_message(message.chat.id, 'Категория введёна неверно')
-            get_restaurant(message)
+            get_category(message)
         else:
             current.category = message.text
             get_dish(message)
 
     def get_dish(message):
-        bot.send_message(message.chat.id, 'Выберите блюдо:', reply_markup=getKeyboard(getDishes(current.restaurant, current.category)))
+        bot.send_message(message.chat.id, 'Выберите блюдо:', reply_markup=getKeyboard(getDishes(restaurant, current.category)))
         bot.register_next_step_handler(message, handleCommands, save_dish)
 
     def save_dish(message):
         try:
-            getDishes(current.restaurant, current.category).index(message.text)
+            getDishes(restaurant, current.category).index(message.text)
         except:
             bot.send_message(message.chat.id, 'Блюдо введёно неверно')
             get_dish(message)
         else:
             current.dish = message.text.split('..........')[0]
+            current.price = int(message.text.split('..........')[1])
             save(message)
 
     def save(message):
         orderArr.append({
-            'restaurant': current.restaurant,
             'category': current.category,
-            'dish': current.dish
+            'dish': current.dish,
+            'price': current.price
         })
         bot.send_message(message.chat.id, 'Блюдо добавлено')
         get_category(message)
@@ -105,4 +96,4 @@ def order(bot, m):
         'discard': 'Отменить заказ'
     }
     current = Order()
-    get_restaurant(m)
+    get_category(m)
