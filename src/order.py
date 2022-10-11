@@ -1,6 +1,6 @@
 from telebot import types
 
-from DataAccessFunctions import addOrder, getCategories, getDishes, getPaymentByOffice, getRestaurants, getUserByTelegramChatId
+from DataAccessFunctions import addOrder, getCategories, getDishes, getOrdersStatus, getPaymentByOffice, getRestaurants, getUserByTelegramChatId
 from validate import validate
 
 class Order:
@@ -43,6 +43,10 @@ def order(bot, m):
         if len(orderArr) == 0:
             cmd_discard(message)
         else:
+            if not getOrdersStatus(getUserByTelegramChatId(m.chat.id)['office']):
+                bot.send_message(message.chat.id, 'Сбор заказов уже завершён')
+                return
+            
             msg = ''
             for el in orderArr:
                 msg += el['restaurant'] + ' - ' + el['category'] + ' - ' + el['dish'] + '\n'
@@ -119,6 +123,10 @@ def order(bot, m):
         })
         bot.send_message(message.chat.id, 'Блюдо добавлено')
         get_category(message)
+
+    if not getOrdersStatus(getUserByTelegramChatId(m.chat.id)['office']):
+        bot.send_message(m.chat.id, 'Сбор заказов уже завершён')
+        return
 
     orderArr = []
     commands = {

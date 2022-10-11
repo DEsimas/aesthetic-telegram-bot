@@ -74,7 +74,7 @@ def getUsersByOffice(office):
     users = json.load(file)
     elements = []
     for u in users:
-        if u['office'] == office and u['role'] == 'user':
+        if u['office'] == office :
             elements.append(u)
     return elements
 
