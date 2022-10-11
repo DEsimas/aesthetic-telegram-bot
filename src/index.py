@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from registration import registration
 from start import start
+from startDelivery import startDelivery
 
 def main():
     load_dotenv()
@@ -20,7 +21,7 @@ def main():
     
     @bot.message_handler(commands=['test'])
     def t(message):
-        validate(bot, message)
+        startDelivery(bot, message)
 
     bot.infinity_polling()
 

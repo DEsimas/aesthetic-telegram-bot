@@ -11,5 +11,11 @@
         "office": "Октябрьское Поле",
         "telegramChatId": 988798987,
         "role": "user"
+    },
+    {
+        "name": "Мельцер Лев Маркович",
+        "office": "Октябрьское Поле",
+        "telegramChatId": 5158167376,
+        "role": "user"
     }
 ]
