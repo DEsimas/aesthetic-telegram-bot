@@ -1,5 +1,5 @@
 import os
-from DataAccessFunctions import addOrder, getOffices, getOrders, startOrders, validateOrder
+from DataAccessFunctions import addOrder, getDishes, getOffices, getOrders, startOrders, validateOrder
 from validate import validate
 import telebot
 from telebot import types
@@ -12,8 +12,6 @@ from startDelivery import startDelivery
 def main():
     load_dotenv()
     bot = telebot.TeleBot(os.environ.get('API_KEY'))
-
-    startOrders('Авиамоторная')
 
     @bot.message_handler(commands=['reg', 'registration'])
     def r(message):

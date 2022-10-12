@@ -66,7 +66,6 @@ def getDishes(restaurant, category):
                     for d in c['dishes']:
                         elements.append(d['name'] + ".........." + str(d['price']))
                     return elements
-        return None
     return None
 
 def getUsersByOffice(office):
@@ -74,7 +73,7 @@ def getUsersByOffice(office):
     users = json.load(file)
     elements = []
     for u in users:
-        if u['office'] == office :
+        if u['office'] == office and u['role'] == 'user':
             elements.append(u)
     return elements
 

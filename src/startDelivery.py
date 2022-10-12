@@ -15,9 +15,11 @@ def startDelivery(bot, message):
     def Inittime2(message):
         try:
             ti = float(message.text)
+            if ti < 0.1 or ti > 240:
+                raise Exception('time not in range')
         except:
-            bot.send_message(message.chat.id, "Вы выбрали некорректное время")
-            Inittime(message)
+            bot.send_message(message.chat.id, "Вы выбрали некорректное время. Попробуйте ещё раз")
+            bot.register_next_step_handler(message, Inittime2)
         else:
             bot.send_message(message.chat.id, "Через " + str(ti) + " минут вы можете начать собирать заказы")
             notification(bot, getUserByTelegramChatId(message.chat.id)['office'], ti)
